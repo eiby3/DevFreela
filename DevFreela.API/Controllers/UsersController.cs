@@ -16,7 +16,7 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public IActionResult Post([FromBody] CreateUserModel createUserModel)
         {
-            return CreatedAtAction(nameof(GetById), new { id = 1}, createUserModel);
+            return CreatedAtAction(nameof(GetById), new { id = 1 }, createUserModel);
         }
         // api/users/1/login
         [HttpPut("{id}/login")]

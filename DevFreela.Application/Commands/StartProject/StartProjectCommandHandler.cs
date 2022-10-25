@@ -3,11 +3,6 @@ using DevFreela.Infrastructure.Persistence;
 using MediatR;
 using Microsoft.Data.SqlClient;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DevFreela.Application.Commands.StartProject
 {
@@ -35,11 +30,13 @@ namespace DevFreela.Application.Commands.StartProject
                 var script = "UPDATE Projects SET Status = @status, StartedAt = @startedat WHERE Id = @id";
 
                 await sqlConnection.ExecuteAsync(
-                    script, 
-                    new { 
-                        status = project.Status, 
-                        startedat = project.StartedAt, 
-                        request.Id });
+                    script,
+                    new
+                    {
+                        status = project.Status,
+                        startedat = project.StartedAt,
+                        request.Id
+                    });
 
                 return Unit.Value;
             }
