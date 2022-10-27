@@ -10,21 +10,17 @@ using System.Threading.Tasks;
 
 namespace DevFreela.Infrastructure.Persistence.Repository
 {
-    public class ProjectRepository : IProjectRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DevFreelaDbContext _dbContext;
         private readonly string _connectionString;
-        public ProjectRepository(DevFreelaDbContext dbContext, IConfiguration configuration)
+        public UserRepository(DevFreelaDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _connectionString = configuration.GetConnectionString("DevFreelaCs");
         }
-        public async Task<List<Project>> GetAllAsync() => await _dbContext.Projects.ToListAsync();
 
-        public async Task<Project> GetByIdAsync(int id) => 
-            await _dbContext.Projects
-                .Include(p => p.Client)
-                .Include(p => p.Freelancer)
-                .SingleOrDefaultAsync(p => p.Id == id);
+        public async Task<User> GetByIdAsync(int id) 
+            => await _dbContext.Users.SingleOrDefaultAsync(u => u.Id == id);
     }
 }
