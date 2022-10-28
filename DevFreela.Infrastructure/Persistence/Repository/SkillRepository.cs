@@ -21,14 +21,14 @@ namespace DevFreela.Infrastructure.Persistence.Repository
             _connectionString = configuration.GetConnectionString("DevFreelaCs");
         }
 
-        public async Task<List<SkillDTO>> GetAllAsync()
+        public async Task<List<SkillDto>> GetAllAsync()
         {
             using (var sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
                 var script = "SELECT id, Description FROM Skills";
 
-                var skills = await sqlConnection.QueryAsync<SkillDTO>(script);
+                var skills = await sqlConnection.QueryAsync<SkillDto>(script);
 
                 return skills.ToList();
 
