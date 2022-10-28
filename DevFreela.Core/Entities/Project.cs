@@ -27,13 +27,18 @@ namespace DevFreela.Core.Entities
         public DateTime CreatedAt { get; private set; }
         public DateTime? StartedAt { get; private set; }
         public DateTime? FinishedAt { get; private set; }
+        public DateTime? CanceledAt { get; private set; }
         public EnumProjectStatus Status { get; private set; }
         public List<ProjectComment> Comments { get; private set; }
 
         public void Cancel()
         {
             if (Status == EnumProjectStatus.InProgress)
+            {
                 Status = EnumProjectStatus.Cancelled;
+                CanceledAt = DateTime.Now;
+            }
+                
         }
         public void Finish()
         {
