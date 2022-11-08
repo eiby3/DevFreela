@@ -5,6 +5,8 @@ using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.Validators;
 using DevFreela.Core.Repositories;
+using DevFreela.Core.Services;
+using DevFreela.Infrastructure.Auth;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repository;
 using FluentValidation;
@@ -31,7 +33,11 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
 builder.Services.AddScoped<IValidator<CreateProjectCommand>, CreateProjectCommandValidator>();
 
+//MediaR
 builder.Services.AddMediatR(typeof(CreateProjectCommand));
+
+//Auth para o token jwt
+builder.Services.AddScoped<IAuthService, AuthService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
