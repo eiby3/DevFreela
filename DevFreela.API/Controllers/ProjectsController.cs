@@ -1,23 +1,28 @@
 ﻿using DevFreela.Application.Commands.CreateComment;
 using DevFreela.Application.Commands.CreateProject;
+using DevFreela.Application.Commands.CreateUser;
 using DevFreela.Application.Commands.DeleteProject;
 using DevFreela.Application.Commands.FinishProject;
 using DevFreela.Application.Commands.StartProject;
 using DevFreela.Application.Commands.UpdateProject;
 using DevFreela.Application.Queries.GetAllProjects;
 using DevFreela.Application.Queries.GetProjectById;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DevFreela.API.Controllers
 {
     [Route("api/projects")]
+    [ApiController]
     public class ProjectsController : Controller
     {
         private readonly IMediator _mediator;
-        public ProjectsController(IMediator mediator)
+        private IValidator<CreateProjectCommand> _validator;
+        public ProjectsController(IMediator mediator, IValidator<CreateProjectCommand> validator)
         {
             _mediator = mediator;
+            _validator = validator;
         }
         // api/projects?query=netcore
         [HttpGet]
@@ -46,8 +51,14 @@ namespace DevFreela.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] CreateProjectCommand command)
         {
-            if (command.Title.Length > 50)
-                return BadRequest();
+            var isValid = _validator.Validate(command);
+            if (!isValid.IsValid)
+            {
+                var messages = isValid.Errors
+                .Select(x => x.ErrorMessage)
+                .ToList();
+                return BadRequest(messages);
+            }
 
             var id = await _mediator.Send(command);
 

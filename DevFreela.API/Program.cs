@@ -1,9 +1,17 @@
+using DevFreela.API.Controllers;
+using DevFreela.API.Filters;
 using DevFreela.Application.Commands.CreateProject;
+using DevFreela.Application.Commands.CreateUser;
+using DevFreela.Application.Commands.UpdateProject;
+using DevFreela.Application.Validators;
 using DevFreela.Core.Repositories;
 using DevFreela.Infrastructure.Persistence;
 using DevFreela.Infrastructure.Persistence.Repository;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +25,11 @@ builder.Services.AddDbContext<DevFreelaDbContext>(options => options.UseSqlServe
 builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
 builder.Services.AddScoped<ISkillRepository, SkillRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+//FluentValidator
+
+builder.Services.AddScoped<IValidator<CreateUserCommand>, CreateUserCommandValidator>();
+builder.Services.AddScoped<IValidator<CreateProjectCommand>, CreateProjectCommandValidator>();
 
 builder.Services.AddMediatR(typeof(CreateProjectCommand));
 
