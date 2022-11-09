@@ -1,5 +1,6 @@
 ﻿using DevFreela.API.Models;
 using DevFreela.Application.Commands.CreateUser;
+using DevFreela.Application.Commands.LoginUser;
 using DevFreela.Application.Queries.GetUser;
 using DevFreela.Application.Validators;
 using FluentValidation;
@@ -45,11 +46,17 @@ namespace DevFreela.API.Controllers
 
             return CreatedAtAction(nameof(GetById), new { id = id }, command);
         }
-        // api/users/1/login
-        [HttpPut("{id}/login")]
-        public IActionResult Login(int id, [FromBody] LoginModel loginModel)
+        // api/users/login
+        [HttpPut("login")]
+        public async Task<IActionResult> Login([FromBody] LoginUserCommand command)
         {
-            return NoContent();
+            var user = await _mediator.Send(command);
+
+            if (user is null)
+            {
+                return BadRequest();
+            }
+            return Ok(user);
         }
     }
 }
