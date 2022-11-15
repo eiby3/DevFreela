@@ -116,13 +116,12 @@ namespace DevFreela.API.Controllers
         //api/projects/1/finish
         [HttpPut("{id}/finish")]
         [Authorize(Roles = "client")]
-        public async Task<IActionResult> Finish(int id)
+        public async Task<IActionResult> Finish(int id, [FromBody] FinishProjectCommand command)
         {
-            var command = new FinishProjectCommand(id);
+            command.Id = id;
+            var response = await _mediator.Send(command);
 
-            await _mediator.Send(command);
-
-            return NoContent();
+            return Ok(response);
         }
     }
 }

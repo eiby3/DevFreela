@@ -31,6 +31,15 @@ namespace DevFreela.Core.Entities
         public EnumProjectStatus Status { get; private set; }
         public List<ProjectComment> Comments { get; private set; }
 
+        public void SetPaymentPeding()
+        {
+            if (Status == EnumProjectStatus.InProgress)
+            {
+                Status = EnumProjectStatus.PaymentPeding;
+                FinishedAt = null;
+            }
+
+        }
         public void Cancel()
         {
             if (Status == EnumProjectStatus.InProgress)
