@@ -121,7 +121,7 @@ namespace DevFreela.API.Controllers
             command.Id = id;
             var response = await _mediator.Send(command);
 
-            return Ok(response);
+            return Accepted(response);
         }
     }
 }

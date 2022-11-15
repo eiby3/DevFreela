@@ -7,7 +7,7 @@ using System.Text.Json.Nodes;
 
 namespace DevFreela.Application.Commands.FinishProject
 {
-    public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, ServiceInfoDTO>
+    public class FinishProjectCommandHandler : IRequestHandler<FinishProjectCommand, bool>
     {
         private readonly IProjectRepository _projectRepository;
         private readonly IPaymentService _paymentService;
@@ -17,10 +17,9 @@ namespace DevFreela.Application.Commands.FinishProject
             _projectRepository = projectRepository;
             _paymentService = paymentService;
         }
-        public async Task<ServiceInfoDTO> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(FinishProjectCommand request, CancellationToken cancellationToken)
         {
             var project = await _projectRepository.GetByIdAsync(request.Id);
-            project.Finish();
 
             var paymentInfoDTO = new PaymentInfoDTO(request.Id, 
                 request.CreditCardNumber, 
@@ -28,15 +27,13 @@ namespace DevFreela.Application.Commands.FinishProject
                 request.ExpiresAt, 
                 request.FullName,
                 request.Amount);
-
-            var result = await _paymentService.Process(paymentInfoDTO);
-
-            if (!result.sucess)
-                project.SetPaymentPeding();
+            
+            _paymentService.Process(paymentInfoDTO);
+            
+            project.SetPaymentPeding();
             await _projectRepository.ChangeStatusAsync(project);
             
-
-            return result;
+            return true;
         }
     }
 }
