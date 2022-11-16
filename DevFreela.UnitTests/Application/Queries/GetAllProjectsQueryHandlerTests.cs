@@ -18,7 +18,7 @@ namespace DevFreela.UnitTests.Application.Queries
             projectRepositoryMock.Setup(x => x.GetAllAsync())
                 .Returns(Task.FromResult(projectListMock));
 
-            var getAllProjectsQuery = new GetAllProjectsQuery(It.IsAny<string>());
+            var getAllProjectsQuery = new GetAllProjectsQuery();
             
             var getAllProjectsQueryHandler = new GetAllProjectsQueryHandler(projectRepositoryMock.Object);
             //act

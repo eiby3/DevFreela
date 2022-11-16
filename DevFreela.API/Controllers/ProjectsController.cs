@@ -28,9 +28,9 @@ namespace DevFreela.API.Controllers
         // api/projects?query=netcore
         [HttpGet]
         [Authorize(Roles = "client, freelancer")]
-        public async Task<IActionResult> Get(string query)
+        public async Task<IActionResult> Get()
         {
-            var getAllProjectsQuery = new GetAllProjectsQuery(query);
+            var getAllProjectsQuery = new GetAllProjectsQuery();
 
             var projects = await _mediator.Send(getAllProjectsQuery);
 
